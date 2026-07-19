@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (roomErr || !room) {
-    return NextResponse.json({ error: roomErr?.message ?? 'room_create_failed' }, { status: 400 })
+    const message = roomErr?.message.includes('cc_rooms_class_code_key')
+      ? '이미 사용 중인 반 코드예요. 다른 코드를 입력해주세요.'
+      : roomErr?.message ?? 'room_create_failed'
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
   const all = [{ ...leader, role: 'leader' as const }, ...students.map((s: any) => ({ ...s, role: 'student' as const }))]
@@ -50,7 +53,15 @@ export async function POST(req: NextRequest) {
 
   const { error: insertErr } = await supabaseAdmin.from('cc_students').insert(rows)
   if (insertErr) {
-    return NextResponse.json({ error: insertErr.message }, { status: 400 })
+    // 학생 등록이 실패하면 방금 만든 room도 같이 롤백한다.
+    // (안 지우면 room만 빈 채로 남아서, 같은 class_code로 재시도할 때
+    //  "코드가 이미 사용 중"이라는 또 다른 혼란스러운 에러가 난다.)
+    await supabaseAdmin.from('cc_rooms').delete().eq('id', room.id)
+
+    const message = insertErr.message.includes('cc_students_room_id_student_number_key')
+      ? '번호가 중복돼요. 반장 번호와 학생 명단의 번호를 다시 확인해주세요.'
+      : insertErr.message
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
   return NextResponse.json({
