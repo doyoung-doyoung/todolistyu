@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: room } = await supabaseAdmin
-    .from('rooms')
+    .from('cc_rooms')
     .select('id')
     .eq('class_code', classCode)
     .single()
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: student } = await supabaseAdmin
-    .from('students')
+    .from('cc_students')
     .select('id, password_hash, role, must_change_password')
     .eq('room_id', room.id)
     .eq('student_number', studentNumber)
