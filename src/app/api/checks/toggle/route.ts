@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   if (!postId || !studentId) return NextResponse.json({ error: 'invalid_body' }, { status: 400 })
 
   const { data: post } = await supabaseAdmin
-    .from('posts')
+    .from('cc_posts')
     .select('id, room_id, checker_type')
     .eq('id', postId)
     .single()
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: existing } = await supabaseAdmin
-    .from('checks')
+    .from('cc_checks')
     .select('checked')
     .eq('post_id', postId)
     .eq('student_id', studentId)
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   const nextChecked = !existing?.checked
 
   const { error } = await supabaseAdmin
-    .from('checks')
+    .from('cc_checks')
     .update({
       checked: nextChecked,
       checked_at: nextChecked ? new Date().toISOString() : null,
