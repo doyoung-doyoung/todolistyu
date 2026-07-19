@@ -7,7 +7,7 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: 'not_logged_in' }, { status: 401 })
 
   const { data, error } = await supabaseAdmin
-    .from('students')
+    .from('cc_students')
     .select('id, student_number, name, role')
     .eq('room_id', session.roomId)
     .order('student_number', { ascending: true })
