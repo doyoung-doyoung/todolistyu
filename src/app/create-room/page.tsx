@@ -33,6 +33,22 @@ export default function CreateRoomPage() {
       return
     }
     const students = parseRosterText()
+
+    // 번호 중복 체크 (반장 번호 vs 명단, 명단 내부)
+    const allNumbers = [Number(leaderNumber), ...students.map((s) => s.studentNumber)]
+    const seen = new Set<number>()
+    const duplicates = new Set<number>()
+    for (const n of allNumbers) {
+      if (seen.has(n)) duplicates.add(n)
+      seen.add(n)
+    }
+    if (duplicates.size > 0) {
+      setError(
+        `번호가 중복돼요: ${Array.from(duplicates).join(', ')}번. 반장 번호와 학생 명단 번호를 확인해주세요.`
+      )
+      return
+    }
+
     setLoading(true)
     try {
       const res = await fetch('/api/rooms/create', {
