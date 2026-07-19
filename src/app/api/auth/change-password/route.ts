@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: student } = await supabaseAdmin
-    .from('students')
+    .from('cc_students')
     .select('id, password_hash')
     .eq('id', session.studentId)
     .single()
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
   const newHash = await bcrypt.hash(newPassword, 10)
   const { error } = await supabaseAdmin
-    .from('students')
+    .from('cc_students')
     .update({ password_hash: newHash, must_change_password: false })
     .eq('id', student.id)
 
