@@ -7,7 +7,7 @@ export async function GET() {
   if (!session) return NextResponse.json({ loggedIn: false })
 
   const { data: student } = await supabaseAdmin
-    .from('students')
+    .from('cc_students')
     .select('id, name, student_number, role, must_change_password, room_id')
     .eq('id', session.studentId)
     .single()
