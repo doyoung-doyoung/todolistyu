@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: room, error: roomErr } = await supabaseAdmin
-    .from('rooms')
+    .from('cc_rooms')
     .insert({ name: roomName, class_code: classCode })
     .select()
     .single()
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     plaintextRoster.push({ studentNumber: s.studentNumber, name: s.name, role: s.role, tempPassword })
   }
 
-  const { error: insertErr } = await supabaseAdmin.from('students').insert(rows)
+  const { error: insertErr } = await supabaseAdmin.from('cc_students').insert(rows)
   if (insertErr) {
     return NextResponse.json({ error: insertErr.message }, { status: 400 })
   }
