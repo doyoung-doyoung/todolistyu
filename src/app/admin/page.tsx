@@ -60,12 +60,12 @@ export default function AdminPage() {
               key={r.id}
               className="rounded-xl border border-slate-200 bg-white p-4 flex items-center justify-between"
             >
-              <div>
+              <a href={`/admin/rooms/${r.id}`} className="flex-1">
                 <p className="font-medium text-slate-800">{r.name}</p>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  코드 {r.class_code} · 학생 {r.studentCount}명 · 항목 {r.postCount}개
+                  코드 {r.class_code} · 학생 {r.studentCount}명 · 항목 {r.postCount}개 · 관리하려면 탭
                 </p>
-              </div>
+              </a>
 
               {confirmingId === r.id ? (
                 <div className="flex gap-2 items-center">
