@@ -5,10 +5,10 @@ const SECRET = new TextEncoder().encode(process.env.SESSION_SECRET!)
 const COOKIE_NAME = 'session'
 
 export type SessionPayload = {
-  studentId: number
-  roomId: number
-  role: 'leader' | 'student'
-  mustChangePassword: boolean
+  studentId?: number
+  roomId?: number
+  role: 'leader' | 'student' | 'admin'
+  mustChangePassword?: boolean
 }
 
 export async function createSession(payload: SessionPayload) {
