@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (!room) {
-    return NextResponse.json({ error: '반 코드를 찾을 수 없어요' }, { status: 401 })
+    return NextResponse.json({ error: 'ไม่พบรหัสห้องนี้' }, { status: 401 })
   }
 
   const { data: student } = await supabaseAdmin
@@ -29,12 +29,12 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (!student) {
-    return NextResponse.json({ error: '학생 번호를 찾을 수 없어요' }, { status: 401 })
+    return NextResponse.json({ error: 'ไม่พบเลขที่นักเรียนนี้' }, { status: 401 })
   }
 
   const ok = await bcrypt.compare(password, student.password_hash)
   if (!ok) {
-    return NextResponse.json({ error: '비밀번호가 맞지 않아요' }, { status: 401 })
+    return NextResponse.json({ error: 'รหัสผ่านไม่ถูกต้อง' }, { status: 401 })
   }
 
   await createSession({
