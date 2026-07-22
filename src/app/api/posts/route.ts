@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   const session = await getSession()
   if (!session) return NextResponse.json({ error: 'not_logged_in' }, { status: 401 })
   if (session.role !== 'leader') {
-    return NextResponse.json({ error: '반장만 항목을 등록할 수 있어요' }, { status: 403 })
+    return NextResponse.json({ error: 'หัวหน้าห้องเท่านั้นที่เพิ่มรายการได้' }, { status: 403 })
   }
 
   const { type, title, dueDate, checkerType } = await req.json()
