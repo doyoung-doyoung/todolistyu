@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 const TYPE_LABEL: Record<string, string> = {
-  homework: '숙제',
-  clothes: '입을 옷',
-  supplies: '준비물',
-  note: '노트',
+  homework: 'การบ้าน',
+  clothes: 'ชุดที่ต้องใส่',
+  supplies: 'อุปกรณ์การเรียน',
+  note: 'สมุด',
 }
 
 export default function StudentPage() {
@@ -44,53 +44,45 @@ export default function StudentPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 p-4">
+    <main className="min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-slate-800">{me?.name}님, 오늘의 할 일</h1>
-          <a href="/mypage" className="text-sm text-blue-600">
-            마이페이지
+          <h1 className="font-display text-lg font-bold">
+            สวัสดี {me?.name} <span className="text-[var(--accent-cyan)]">👋</span>
+          </h1>
+          <a href="/mypage" className="text-sm text-[var(--accent-cyan)]">
+            โปรไฟล์ของฉัน
           </a>
         </div>
+        <p className="text-sm text-[var(--text-muted)] -mt-2">นี่คือสิ่งที่ต้องทำวันนี้</p>
 
         <div className="space-y-3">
-          {posts.length === 0 && <p className="text-sm text-slate-400">등록된 항목이 없어요</p>}
+          {posts.length === 0 && <p className="text-sm text-[var(--text-muted)]">ยังไม่มีรายการ</p>}
           {posts.map((p) => {
             const c = myCheck(p.id)
             const checked = c?.checked ?? false
             const selfCheckable = p.checker_type === 'self'
 
             return (
-              <div
-                key={p.id}
-                className="rounded-xl border border-slate-200 bg-white p-3 flex items-center justify-between"
-              >
+              <div key={p.id} className="glass-card p-3 flex items-center justify-between">
                 <div>
-                  <span className="text-xs rounded-full bg-slate-100 px-2 py-0.5 text-slate-600 mr-2">
-                    {TYPE_LABEL[p.type] ?? p.type}
-                  </span>
-                  <span className="font-medium text-slate-800">{p.title}</span>
-                  {p.due_date && <p className="text-xs text-slate-400 mt-1">마감 {p.due_date}</p>}
+                  <span className="pill pill-type mr-2">{TYPE_LABEL[p.type] ?? p.type}</span>
+                  <span className="font-medium">{p.title}</span>
+                  {p.due_date && (
+                    <p className="text-xs text-[var(--text-muted)] mt-1 mono">กำหนดส่ง {p.due_date}</p>
+                  )}
                 </div>
 
                 {selfCheckable ? (
                   <button
                     onClick={() => toggleSelf(p.id)}
-                    className={`rounded-lg px-3 py-2 text-sm font-semibold border ${
-                      checked
-                        ? 'bg-green-100 border-green-300 text-green-700'
-                        : 'bg-slate-50 border-slate-200 text-slate-500'
-                    }`}
+                    className={`pill font-semibold ${checked ? 'pill-done' : 'pill-pending'}`}
                   >
-                    {checked ? '확인함' : '확인하기'}
+                    {checked ? 'เช็คแล้ว' : 'เช็คเลย'}
                   </button>
                 ) : (
-                  <span
-                    className={`rounded-lg px-3 py-2 text-sm font-medium ${
-                      checked ? 'text-green-700' : 'text-slate-400'
-                    }`}
-                  >
-                    {checked ? '제출 확인됨' : '반장 확인 대기'}
+                  <span className={`pill ${checked ? 'pill-done' : 'pill-pending'}`}>
+                    {checked ? 'หัวหน้าห้องเช็คแล้ว' : 'รอหัวหน้าห้องเช็ค'}
                   </span>
                 )}
               </div>
