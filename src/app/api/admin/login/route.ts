@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'admin_not_configured' }, { status: 500 })
   }
   if (!password || !safeCompare(String(password), expected)) {
-    return NextResponse.json({ error: '비밀번호가 맞지 않아요' }, { status: 401 })
+    return NextResponse.json({ error: 'รหัสผ่านไม่ถูกต้อง' }, { status: 401 })
   }
 
   await createSession({ role: 'admin' })
