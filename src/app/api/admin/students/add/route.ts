@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
   if (error) {
     const message = error.message.includes('cc_students_room_id_student_number_key')
-      ? '이미 사용 중인 번호예요.'
+      ? 'เลขที่นี้ถูกใช้ไปแล้ว'
       : error.message
     return NextResponse.json({ error: message }, { status: 400 })
   }
