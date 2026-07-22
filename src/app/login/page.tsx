@@ -21,7 +21,7 @@ export default function LoginPage() {
         body: JSON.stringify({ classCode, studentNumber: Number(studentNumber), password }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? '로그인 실패')
+      if (!res.ok) throw new Error(data.error ?? 'เข้าสู่ระบบไม่สำเร็จ')
 
       if (data.mustChangePassword) {
         router.push('/mypage?first=1')
@@ -38,47 +38,44 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+    <main className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-sm space-y-4">
-        <h1 className="text-xl font-bold text-slate-800 text-center">로그인</h1>
+        <h1 className="font-display text-xl font-bold text-center">เข้าสู่ระบบ</h1>
 
-        <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
-          <label className="block text-sm font-medium text-slate-600">
-            반 코드
+        <div className="space-y-3 glass-card p-4">
+          <label className="block text-sm font-medium text-[var(--text-muted)]">
+            รหัสห้อง
             <input
-              className="mt-1 w-full rounded-lg border border-slate-300 p-2"
+              className="mt-1 w-full glass-input p-2.5"
               value={classCode}
               onChange={(e) => setClassCode(e.target.value)}
             />
           </label>
-          <label className="block text-sm font-medium text-slate-600">
-            내 번호
+          <label className="block text-sm font-medium text-[var(--text-muted)]">
+            เลขที่ของฉัน
             <input
               type="number"
-              className="mt-1 w-full rounded-lg border border-slate-300 p-2"
+              className="mt-1 w-full glass-input p-2.5"
               value={studentNumber}
               onChange={(e) => setStudentNumber(e.target.value)}
             />
           </label>
-          <label className="block text-sm font-medium text-slate-600">
-            비밀번호
+          <label className="block text-sm font-medium text-[var(--text-muted)]">
+            รหัสผ่าน
             <input
               type="password"
-              className="mt-1 w-full rounded-lg border border-slate-300 p-2"
+              className="mt-1 w-full glass-input p-2.5"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
             />
           </label>
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-[var(--accent-red)]">{error}</p>}
 
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="w-full rounded-xl bg-blue-600 py-3 text-white font-semibold shadow disabled:opacity-50"
-        >
-          {loading ? '확인 중...' : '로그인'}
+        <button onClick={handleLogin} disabled={loading} className="btn-neon w-full py-3.5">
+          {loading ? 'กำลังตรวจสอบ...' : 'เข้าสู่ระบบ'}
         </button>
       </div>
     </main>
