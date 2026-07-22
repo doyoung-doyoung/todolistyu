@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
 const TYPE_LABEL: Record<string, string> = {
-  homework: '숙제',
-  clothes: '입을 옷',
-  supplies: '준비물',
-  note: '노트',
+  homework: 'การบ้าน',
+  clothes: 'ชุดที่ต้องใส่',
+  supplies: 'อุปกรณ์การเรียน',
+  note: 'สมุด',
 }
 
 type Student = { id: number; student_number: number; name: string; role: string }
@@ -54,7 +54,7 @@ export default function AdminRoomDetailPage() {
   async function handleAddStudent() {
     setError('')
     if (!newNumber || !newName) {
-      setError('번호와 이름을 입력해주세요')
+      setError('กรุณากรอกเลขที่และชื่อ')
       return
     }
     const res = await fetch('/api/admin/students/add', {
@@ -64,7 +64,7 @@ export default function AdminRoomDetailPage() {
     })
     const data = await res.json()
     if (!res.ok) {
-      setError(data.error ?? '추가 실패')
+      setError(data.error ?? 'เพิ่มไม่สำเร็จ')
       return
     }
     setAddedPassword({ name: newName, password: data.tempPassword })
@@ -82,7 +82,7 @@ export default function AdminRoomDetailPage() {
     })
     const data = await res.json()
     if (!res.ok) {
-      setError(data.error ?? '삭제 실패')
+      setError(data.error ?? 'ลบไม่สำเร็จ')
       setConfirmingStudentId(null)
       return
     }
@@ -101,7 +101,7 @@ export default function AdminRoomDetailPage() {
   }
 
   if (loading) {
-    return <main className="min-h-screen p-4 text-sm text-[var(--text-muted)]">불러오는 중...</main>
+    return <main className="min-h-screen p-4 text-sm text-[var(--text-muted)]">กำลังโหลด...</main>
   }
 
   return (
@@ -109,41 +109,44 @@ export default function AdminRoomDetailPage() {
       <div className="mx-auto max-w-2xl space-y-6">
         <div>
           <a href="/admin" className="text-sm text-[var(--accent-cyan)]">
-            ← 전체 반 목록
+            ← ห้องเรียนทั้งหมด
           </a>
           <h1 className="font-display text-lg font-bold mt-1">
-            {room?.name} <span className="text-sm font-normal text-[var(--text-muted)] mono">코드 {room?.class_code}</span>
+            {room?.name}{' '}
+            <span className="text-sm font-normal text-[var(--text-muted)] mono">รหัส {room?.class_code}</span>
           </h1>
         </div>
 
-        {/* 학생 관리 */}
+        {/* จัดการนักเรียน */}
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold text-[var(--text-muted)]">학생 명단 ({students.length}명)</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-muted)]">
+            รายชื่อนักเรียน ({students.length} คน)
+          </h2>
 
           <div className="glass-card divide-y divide-white/10">
             {students.map((s) => (
               <div key={s.id} className="flex items-center justify-between p-3">
                 <span className="text-sm">
                   {s.student_number}. {s.name}
-                  {s.role === 'leader' && <span className="pill pill-type ml-2">반장</span>}
+                  {s.role === 'leader' && <span className="pill pill-type ml-2">หัวหน้าห้อง</span>}
                 </span>
 
                 {confirmingStudentId === s.id ? (
                   <div className="flex gap-2 items-center">
-                    <span className="text-xs text-[var(--accent-red)]">삭제할까요?</span>
+                    <span className="text-xs text-[var(--accent-red)]">ลบใช่ไหม?</span>
                     <button onClick={() => handleDeleteStudent(s.id)} className="pill pill-danger">
-                      삭제
+                      ลบ
                     </button>
                     <button
                       onClick={() => setConfirmingStudentId(null)}
                       className="text-xs text-[var(--text-muted)]"
                     >
-                      취소
+                      ยกเลิก
                     </button>
                   </div>
                 ) : (
                   <button onClick={() => setConfirmingStudentId(s.id)} className="text-xs text-[var(--accent-red)]">
-                    삭제
+                    ลบ
                   </button>
                 )}
               </div>
@@ -151,42 +154,46 @@ export default function AdminRoomDetailPage() {
           </div>
 
           <div className="glass-card p-3 space-y-2">
-            <p className="text-xs font-medium text-[var(--text-muted)]">학생 추가</p>
+            <p className="text-xs font-medium text-[var(--text-muted)]">เพิ่มนักเรียน</p>
             <div className="flex gap-2">
               <input
                 type="number"
-                placeholder="번호"
+                placeholder="เลขที่"
                 className="w-20 glass-input p-2 text-sm"
                 value={newNumber}
                 onChange={(e) => setNewNumber(e.target.value)}
               />
               <input
-                placeholder="이름"
+                placeholder="ชื่อ"
                 className="flex-1 glass-input p-2 text-sm"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
               <button onClick={handleAddStudent} className="btn-neon px-3 py-2 text-sm">
-                추가
+                เพิ่ม
               </button>
             </div>
             {error && <p className="text-xs text-[var(--accent-red)]">{error}</p>}
             {addedPassword && (
               <p className="text-xs text-[var(--text-muted)] bg-white/5 rounded-lg p-2">
-                {addedPassword.name} 학생 임시 비밀번호:{' '}
+                รหัสผ่านชั่วคราวของ {addedPassword.name}:{' '}
                 <span className="mono font-semibold text-[var(--accent-cyan)]">{addedPassword.password}</span>
                 <br />
-                (이 화면에서 지금 한 번만 보여요, 학생에게 직접 전달해주세요)
+                (แสดงครั้งเดียวตรงนี้ กรุณาส่งให้นักเรียนโดยตรง)
               </p>
             )}
           </div>
         </section>
 
-        {/* 항목 관리 */}
+        {/* จัดการรายการ */}
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold text-[var(--text-muted)]">등록된 항목 ({posts.length}개)</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-muted)]">
+            รายการที่ลงทะเบียน ({posts.length} รายการ)
+          </h2>
           <div className="glass-card divide-y divide-white/10">
-            {posts.length === 0 && <p className="p-3 text-sm text-[var(--text-muted)]">등록된 항목이 없어요</p>}
+            {posts.length === 0 && (
+              <p className="p-3 text-sm text-[var(--text-muted)]">ยังไม่มีรายการ</p>
+            )}
             {posts.map((p) => (
               <div key={p.id} className="flex items-center justify-between p-3">
                 <span className="text-sm">
@@ -196,20 +203,20 @@ export default function AdminRoomDetailPage() {
 
                 {confirmingPostId === p.id ? (
                   <div className="flex gap-2 items-center">
-                    <span className="text-xs text-[var(--accent-red)]">삭제할까요?</span>
+                    <span className="text-xs text-[var(--accent-red)]">ลบใช่ไหม?</span>
                     <button onClick={() => handleDeletePost(p.id)} className="pill pill-danger">
-                      삭제
+                      ลบ
                     </button>
                     <button
                       onClick={() => setConfirmingPostId(null)}
                       className="text-xs text-[var(--text-muted)]"
                     >
-                      취소
+                      ยกเลิก
                     </button>
                   </div>
                 ) : (
                   <button onClick={() => setConfirmingPostId(p.id)} className="text-xs text-[var(--accent-red)]">
-                    삭제
+                    ลบ
                   </button>
                 )}
               </div>
