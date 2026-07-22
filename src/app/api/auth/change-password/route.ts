@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid_body' }, { status: 400 })
   }
   if (newPassword.length < 6) {
-    return NextResponse.json({ error: '새 비밀번호는 6자 이상이어야 해요' }, { status: 400 })
+    return NextResponse.json({ error: 'รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร' }, { status: 400 })
   }
 
   const { data: student } = await supabaseAdmin
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   if (!student) return NextResponse.json({ error: 'not_found' }, { status: 404 })
 
   const ok = await bcrypt.compare(oldPassword, student.password_hash)
-  if (!ok) return NextResponse.json({ error: '현재 비밀번호가 맞지 않아요' }, { status: 401 })
+  if (!ok) return NextResponse.json({ error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' }, { status: 401 })
 
   const newHash = await bcrypt.hash(newPassword, 10)
   const { error } = await supabaseAdmin
