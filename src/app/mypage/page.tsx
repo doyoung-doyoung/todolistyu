@@ -35,11 +35,11 @@ function MyPageInner() {
   async function handleSubmit() {
     setError('')
     if (newPassword.length < 6) {
-      setError('새 비밀번호는 6자 이상으로 해주세요')
+      setError('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร')
       return
     }
     if (newPassword !== newPassword2) {
-      setError('새 비밀번호가 서로 달라요')
+      setError('รหัสผ่านใหม่ไม่ตรงกัน')
       return
     }
     const res = await fetch('/api/auth/change-password', {
@@ -49,7 +49,7 @@ function MyPageInner() {
     })
     const data = await res.json()
     if (!res.ok) {
-      setError(data.error ?? '변경 실패')
+      setError(data.error ?? 'เปลี่ยนรหัสผ่านไม่สำเร็จ')
       return
     }
     setDone(true)
@@ -57,14 +57,14 @@ function MyPageInner() {
 
   if (done) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+      <main className="min-h-screen flex items-center justify-center p-6">
         <div className="w-full max-w-sm text-center space-y-4">
-          <p className="text-slate-700 font-medium">비밀번호가 변경됐어요!</p>
+          <p className="font-medium text-[var(--accent-cyan)]">เปลี่ยนรหัสผ่านสำเร็จแล้ว!</p>
           <button
             onClick={() => router.push(me?.role === 'leader' ? '/leader' : '/student')}
-            className="w-full rounded-xl bg-blue-600 py-3 text-white font-semibold shadow"
+            className="btn-neon w-full py-3"
           >
-            계속하기
+            ดำเนินการต่อ
           </button>
         </div>
       </main>
@@ -72,49 +72,46 @@ function MyPageInner() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+    <main className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-sm space-y-4">
-        <h1 className="text-xl font-bold text-slate-800 text-center">
-          {isFirst ? '처음 로그인이에요, 비밀번호를 바꿔주세요' : '비밀번호 변경'}
+        <h1 className="font-display text-xl font-bold text-center">
+          {isFirst ? 'เข้าสู่ระบบครั้งแรก กรุณาเปลี่ยนรหัสผ่าน' : 'เปลี่ยนรหัสผ่าน'}
         </h1>
 
-        <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
-          <label className="block text-sm font-medium text-slate-600">
-            {isFirst ? '전달받은 임시 비밀번호' : '현재 비밀번호'}
+        <div className="space-y-3 glass-card p-4">
+          <label className="block text-sm font-medium text-[var(--text-muted)]">
+            {isFirst ? 'รหัสผ่านชั่วคราวที่ได้รับ' : 'รหัสผ่านปัจจุบัน'}
             <input
               type="password"
-              className="mt-1 w-full rounded-lg border border-slate-300 p-2"
+              className="mt-1 w-full glass-input p-2.5"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
             />
           </label>
-          <label className="block text-sm font-medium text-slate-600">
-            새 비밀번호
+          <label className="block text-sm font-medium text-[var(--text-muted)]">
+            รหัสผ่านใหม่
             <input
               type="password"
-              className="mt-1 w-full rounded-lg border border-slate-300 p-2"
+              className="mt-1 w-full glass-input p-2.5"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
           </label>
-          <label className="block text-sm font-medium text-slate-600">
-            새 비밀번호 확인
+          <label className="block text-sm font-medium text-[var(--text-muted)]">
+            ยืนยันรหัสผ่านใหม่
             <input
               type="password"
-              className="mt-1 w-full rounded-lg border border-slate-300 p-2"
+              className="mt-1 w-full glass-input p-2.5"
               value={newPassword2}
               onChange={(e) => setNewPassword2(e.target.value)}
             />
           </label>
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-[var(--accent-red)]">{error}</p>}
 
-        <button
-          onClick={handleSubmit}
-          className="w-full rounded-xl bg-blue-600 py-3 text-white font-semibold shadow"
-        >
-          비밀번호 바꾸기
+        <button onClick={handleSubmit} className="btn-neon w-full py-3.5">
+          เปลี่ยนรหัสผ่าน
         </button>
       </div>
     </main>
