@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     })
     const data = await res.json()
     if (!res.ok) {
-      setError(data.error ?? '로그인 실패')
+      setError(data.error ?? 'เข้าสู่ระบบไม่สำเร็จ')
       return
     }
     router.push('/admin')
@@ -26,10 +26,10 @@ export default function AdminLoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-sm space-y-4">
-        <h1 className="font-display text-xl font-bold text-center">관리자 로그인</h1>
+        <h1 className="font-display text-xl font-bold text-center">เข้าสู่ระบบผู้ดูแลระบบ</h1>
         <div className="space-y-3 glass-card p-4">
           <label className="block text-sm font-medium text-[var(--text-muted)]">
-            관리자 비밀번호
+            รหัสผ่านผู้ดูแลระบบ
             <input
               type="password"
               className="mt-1 w-full glass-input p-2.5"
@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
         </div>
         {error && <p className="text-sm text-[var(--accent-red)]">{error}</p>}
         <button onClick={handleLogin} className="btn-neon w-full py-3">
-          로그인
+          เข้าสู่ระบบ
         </button>
       </div>
     </main>
