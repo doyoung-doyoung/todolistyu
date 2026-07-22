@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
   if (student.role === 'leader') {
     return NextResponse.json(
-      { error: '반장은 여기서 바로 삭제할 수 없어요. 반장을 다른 학생으로 바꾼 뒤 삭제해주세요.' },
+      { error: 'ลบหัวหน้าห้องตรงนี้ไม่ได้ กรุณาเปลี่ยนหัวหน้าห้องเป็นคนอื่นก่อนแล้วค่อยลบ' },
       { status: 400 }
     )
   }
