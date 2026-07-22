@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   if (roomErr || !room) {
     const message = roomErr?.message.includes('cc_rooms_class_code_key')
-      ? '이미 사용 중인 반 코드예요. 다른 코드를 입력해주세요.'
+      ? 'รหัสห้องนี้ถูกใช้ไปแล้ว กรุณาใช้รหัสอื่น'
       : roomErr?.message ?? 'room_create_failed'
     return NextResponse.json({ error: message }, { status: 400 })
   }
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     await supabaseAdmin.from('cc_rooms').delete().eq('id', room.id)
 
     const message = insertErr.message.includes('cc_students_room_id_student_number_key')
-      ? '번호가 중복돼요. 반장 번호와 학생 명단의 번호를 다시 확인해주세요.'
+      ? 'เลขที่ซ้ำกัน กรุณาตรวจสอบเลขที่หัวหน้าห้องกับรายชื่อนักเรียนอีกครั้ง'
       : insertErr.message
     return NextResponse.json({ error: message }, { status: 400 })
   }
