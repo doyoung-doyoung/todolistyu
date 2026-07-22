@@ -47,11 +47,11 @@ export default function AdminPage() {
   return (
     <main className="min-h-screen p-4">
       <div className="mx-auto max-w-2xl space-y-4">
-        <h1 className="font-display text-lg font-bold">관리자 · 전체 반 목록</h1>
+        <h1 className="font-display text-lg font-bold">ผู้ดูแลระบบ · ห้องเรียนทั้งหมด</h1>
 
-        {loading && <p className="text-sm text-[var(--text-muted)]">불러오는 중...</p>}
+        {loading && <p className="text-sm text-[var(--text-muted)]">กำลังโหลด...</p>}
         {!loading && rooms.length === 0 && (
-          <p className="text-sm text-[var(--text-muted)]">생성된 반이 없어요</p>
+          <p className="text-sm text-[var(--text-muted)]">ยังไม่มีห้องเรียนที่สร้างไว้</p>
         )}
 
         <div className="space-y-2">
@@ -60,21 +60,21 @@ export default function AdminPage() {
               <a href={`/admin/rooms/${r.id}`} className="flex-1">
                 <p className="font-medium">{r.name}</p>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5 mono">
-                  코드 {r.class_code} · 학생 {r.studentCount}명 · 항목 {r.postCount}개 · 관리하려면 탭
+                  รหัส {r.class_code} · นักเรียน {r.studentCount} คน · รายการ {r.postCount} รายการ · แตะเพื่อจัดการ
                 </p>
               </a>
 
               {confirmingId === r.id ? (
                 <div className="flex gap-2 items-center">
-                  <span className="text-xs text-[var(--accent-red)]">정말 삭제할까요?</span>
+                  <span className="text-xs text-[var(--accent-red)]">ลบห้องนี้จริงไหม?</span>
                   <button onClick={() => handleDelete(r.id)} className="pill pill-danger">
-                    삭제
+                    ลบ
                   </button>
                   <button
                     onClick={() => setConfirmingId(null)}
                     className="text-xs text-[var(--text-muted)]"
                   >
-                    취소
+                    ยกเลิก
                   </button>
                 </div>
               ) : (
@@ -82,7 +82,7 @@ export default function AdminPage() {
                   onClick={() => setConfirmingId(r.id)}
                   className="text-xs text-[var(--accent-red)]"
                 >
-                  반 삭제
+                  ลบห้องเรียน
                 </button>
               )}
             </div>
