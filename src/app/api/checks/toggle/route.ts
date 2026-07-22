@@ -25,11 +25,11 @@ export async function POST(req: NextRequest) {
   // checker_type === 'self'    -> 본인만, 본인 것만 체크 가능 (노트 확인 등)
   if (post.checker_type === 'leader') {
     if (session.role !== 'leader') {
-      return NextResponse.json({ error: '반장만 체크할 수 있어요' }, { status: 403 })
+      return NextResponse.json({ error: 'หัวหน้าห้องเท่านั้นที่เช็คได้' }, { status: 403 })
     }
   } else {
     if (session.studentId !== studentId) {
-      return NextResponse.json({ error: '본인만 체크할 수 있어요' }, { status: 403 })
+      return NextResponse.json({ error: 'เช็คได้เฉพาะของตัวเองเท่านั้น' }, { status: 403 })
     }
   }
 
